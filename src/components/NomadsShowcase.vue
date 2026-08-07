@@ -2,10 +2,10 @@
   <section class="nomads-showcase-section">
     <div class="showcase-header">
       <div class="header-left">
-        <h2 class="showcase-title">实战案例与标准公文模板库 (Nomads Showcase)</h2>
-        <p class="showcase-subtitle">精选体制内标准公文与工作汇报场景，点击“一键套用”快速生成规范文案</p>
+        <h2 class="showcase-title">实战案例与模板库 (Nomads Showcase)</h2>
+        <p class="showcase-subtitle">精选高频实战场景，点击“一键套用”快速生成高质量结果</p>
       </div>
-      <span class="showcase-badge">已收录 {{ showcaseItems.length }} 个公文实战模板</span>
+      <span class="showcase-badge">已收录 {{ showcaseItems.length }} 个实战模板</span>
     </div>
 
     <div class="showcase-grid">
@@ -41,95 +41,119 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
+const props = defineProps<{
+  appTitle?: string;
+  isImage?: boolean;
+}>();
+
+const emit = defineEmits<{
+  (e: 'apply-template', payload: { prompt: string; style?: string }): void;
+}>();
+
 export interface ShowcaseItem {
   id: string;
   tag: string;
   title: string;
   prompt: string;
-  gongwenType?: string;
-  orgType?: string;
-  formatTier?: string;
+  style?: string;
   usageCount: string;
 }
 
-const emit = defineEmits<{
-  (e: 'apply-template', payload: {
-    prompt: string;
-    gongwenType?: string;
-    orgType?: string;
-    formatTier?: string;
-  }): void;
-}>();
-
-const showcaseItems = computed<ShowcaseItem[]>(() => [
-  {
-    id: 'gongwen-1',
-    tag: '机关发文',
-    title: '关于进一步加强安全生产隐患排查与整改的通知',
-    prompt: '针对全市近期重点行业领域安全生产大检查，拟定一份发往各区县、各有关部门的标准公文通知，明确排查重点、整改时限与责任追究。',
-    gongwenType: '党政机关标准公文请示与批复',
-    orgType: '党委政府机关',
-    formatTier: '严谨红头文件格式',
-    usageCount: '41.2k'
-  },
-  {
-    id: 'gongwen-2',
-    tag: '述职总结',
-    title: '单位2025年度抓党建与业务融合述职报告',
-    prompt: '围绕政治建设、服务大局、廉洁自律及存在短板四个维度，总结本单位全年在推进数字政务与便民服务方面的成绩与未来打算。',
-    gongwenType: '年度/季度工作总结与述职报告',
-    orgType: '事业单位',
-    formatTier: '标准工作汇报格式',
-    usageCount: '38.6k'
-  },
-  {
-    id: 'gongwen-3',
-    tag: '领导讲话',
-    title: '主要领导在深化作风建设专项行动上的动员讲话',
-    prompt: '结合贯彻落实中央八项规定精神，面向全系统中层以上干部撰写动员讲话稿，强调提高政治站位、狠抓落实与长效常态。',
-    gongwenType: '领导讲话稿与会议发言材料',
-    orgType: '国有企业',
-    formatTier: '会议纪要演讲格式',
-    usageCount: '35.4k'
-  },
-  {
-    id: 'gongwen-4',
-    tag: '专项整改',
-    title: '机关作风效能建设与问题整改自查报告',
-    prompt: '针对上级督查反馈的办事流程较繁琐、跨部门协同效率不足等问题，剖析思想根源，提出4条针对性强且可落地的整改举措。',
-    gongwenType: '专项检查排查与整改报告',
-    orgType: '党委政府机关',
-    formatTier: '严谨红头文件格式',
-    usageCount: '29.9k'
-  },
-  {
-    id: 'gongwen-5',
-    tag: '基层治理',
-    title: '基层社区提升网格化精细化治理水平汇报材料',
-    prompt: '总结社区在党员联户、志愿服务、矛盾纠纷调解及智慧社区平台应用方面的创新举措与典型案例，形成专题汇报材料。',
-    gongwenType: '年度/季度工作总结与述职报告',
-    orgType: '基层社区',
-    formatTier: '标准工作汇报格式',
-    usageCount: '27.8k'
-  },
-  {
-    id: 'gongwen-6',
-    tag: '请示批复',
-    title: '关于请求批准实施机关办公自动化升级的请示',
-    prompt: '向主管领导及上级主管部门请示关于采购升级无纸化办公系统与数据安全防护设备的必要性、资金预算与预期成效。',
-    gongwenType: '党政机关标准公文请示与批复',
-    orgType: '事业单位',
-    formatTier: '严谨红头文件格式',
-    usageCount: '24.5k'
+// 模拟实战案例数据库（支持根据文本/图像类及应用主题切换）
+const showcaseItems = computed<ShowcaseItem[]>(() => {
+  if (props.isImage) {
+    return [
+      {
+        id: 'img-1',
+        tag: '写真肖像',
+        title: '商务精英形象照',
+        prompt: '高端写字楼背景，身穿深蓝色西装，眼神自信专注，赛博朋克光影效果',
+        style: '<photography>',
+        usageCount: '18.5k'
+      },
+      {
+        id: 'img-2',
+        tag: '概念插画',
+        title: '未来科幻城市海报',
+        prompt: '霓虹灯光的赛博朋克立体城市，飞行汽车，高品质概念插画，8k分辨率',
+        style: '<illustration>',
+        usageCount: '24.1k'
+      },
+      {
+        id: 'img-3',
+        tag: '二次元动漫',
+        title: '日系国潮动漫角色',
+        prompt: '穿着现代汉服的国风少年，手持纸伞，水彩漫感，唯美光感与柔光滤镜',
+        style: '<anime>',
+        usageCount: '15.9k'
+      },
+      {
+        id: 'img-4',
+        tag: '水彩艺术',
+        title: '治愈系自然风景画',
+        prompt: '晨雾中的森林湖泊，阳光穿透树林，水彩渐变质感，温馨治愈风格',
+        style: '<watercolor>',
+        usageCount: '12.3k'
+      }
+    ];
+  } else {
+    return [
+      {
+        id: 'text-1',
+        tag: '职场总结',
+        title: '周报 OKR 成果提炼',
+        prompt: '本周完成了核心模块优化与线上异常排查，请帮我梳理为具备量化指标的 OKR 汇报文案',
+        style: '专业干练，结果导向',
+        usageCount: '32.8k'
+      },
+      {
+        id: 'text-2',
+        tag: '高情商沟通',
+        title: '拒绝不合理加班话术',
+        prompt: '领导在周末突然布置非紧急任务，如何高情商、委婉且有理有据地推迟到工作日处理？',
+        style: '高情商，委婉，有情调',
+        usageCount: '28.4k'
+      },
+      {
+        id: 'text-3',
+        tag: '短视频文案',
+        title: '知识干货吸睛开头',
+        prompt: '准备制作一条关于高效学习法的短视频，设计 3 个能在前 3 秒留住用户的爆款口播开头',
+        style: '专业干练，结果导向',
+        usageCount: '45.1k'
+      },
+      {
+        id: 'text-4',
+        tag: '商务公文',
+        title: '跨部门协同申请函',
+        prompt: '因项目上线需要研发部门配合联调，撰写一份正式、严谨且明确时间节点的协同申请书',
+        style: '专业干练，结果导向',
+        usageCount: '19.7k'
+      },
+      {
+        id: 'text-5',
+        tag: '小红书种草',
+        title: '实战干货笔记排版',
+        prompt: '分享 5 个提升日常工作效率的文字工具，语言亲切，搭配吸引人的标题与 Emoji 排版',
+        style: '高情商，委婉，有情调',
+        usageCount: '36.2k'
+      },
+      {
+        id: 'text-6',
+        tag: '学术润色',
+        title: '论文摘要与结论重构',
+        prompt: '将以下粗糙的研究结论重写为学术规范、逻辑严密且无语法语病的论文摘要总结',
+        style: '专业干练，结果导向',
+        usageCount: '22.0k'
+      }
+    ];
   }
-]);
+});
 
 function applyTemplate(item: ShowcaseItem) {
   emit('apply-template', {
     prompt: item.prompt,
-    gongwenType: item.gongwenType,
-    orgType: item.orgType,
-    formatTier: item.formatTier
+    style: item.style
   });
 }
 </script>
